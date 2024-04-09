@@ -1,5 +1,6 @@
 import React from 'react';
 import "./sidebar.css"
+import { Link } from 'react-router-dom';
 const AdminSidebar = () => {
     return (
         <nav id="sidebar">
@@ -29,7 +30,7 @@ const AdminSidebar = () => {
                     </ul>
                 </li>
                 <li>
-                    <a href="#">Employee</a>
+                    <Link to="/EmployeeListAdmin"> Employee </Link>
                 </li>
                 <li>
                     <a href="#">Contact</a>

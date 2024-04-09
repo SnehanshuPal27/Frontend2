@@ -7,8 +7,9 @@ import Header2 from './assets/components/Header2.jsx';
 import LoginForm from './assets/components/LoginForm.jsx';
 import AdminDashboard from './assets/components/AdminDashboard.jsx';
 import AdminDashboardLayout from './assets/components/AdminDashboard.jsx';
-import EmployeeList from './assets/components/AdminEmployeeList.jsx';
+
 import AdminEmployeeList from './assets/components/AdminEmployeeList.jsx';
+import NewEmpForm from './assets/components/NewEmpForm.jsx';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -20,6 +21,7 @@ function App() {
       <Route path='/' element={<LoginForm/>} />
       <Route path="/adminDashboard" element={<AdminDashboardLayout/>}></Route>
       <Route path="/EmployeeListAdmin" element={<AdminEmployeeList/>}/>
+      <Route path="/adminNewEmp" element={<NewEmpForm/>}></Route>
     </Routes>
 
    </Router> 

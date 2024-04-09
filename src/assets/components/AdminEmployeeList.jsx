@@ -1,40 +1,58 @@
 import React from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
-const currentUser=null;
-
-async function getEmpList(){
-    try {
-        const currentUserString = localStorage.getItem("currentUser");
-        currentUser = JSON.parse(currentUserString);
-        
-        const employeeList = await axios.get(
-            'http://localhost:3000/api/employees',
-            {
-                headers: {
-                    Authorization: currentUser.accessToken,
-                    userrole:currentUser.role
-
-                }
+const FetchEmployeeList = async () => {
+  try {
+    const currentUserString = localStorage.getItem("currentUser");
+    const currentUser = JSON.parse(currentUserString);
+    const response = await axios.get(
+        'http://localhost:3000/api/employees',
+        {
+            headers: {
+                Authorization: currentUser.accessToken,
+                userrole: currentUser.role
             }
-        );
-        return employeeList;
-        
-        
-    } catch (error) {
-        console.log("Error in fetching employeeList:", error);
-    }
-}
+        }
+    );
+    
+    console.log("in fetch emp list fxn")
+    console.log(response.data)
+    return response.data; // Return the fetched employee list data
+  } catch (error) {
+    console.log("Error in fetching employeeList:", error);
+    return []; // Return an empty array in case of an error
+  }
+};
 
 const AdminEmployeeList = () => {
-  let employeeList=getEmpList();  
+  const [employeeList, setEmployeeList] = React.useState([]);
 
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const data = await FetchEmployeeList();
+      setEmployeeList(data);
+    };
+
+    fetchData();
+  }, []);
+
+  return <EmployeesTable employeeList={employeeList} />;
+};
+
+
+
+const EmployeesTable = ({ employeeList }) => {
+  console.log("emp tbl fxn")
+  console.log(employeeList)
   return (
     <section className="mx-auto w-full max-w-7xl px-4 py-4">
       <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
         <div>
           <h2 className="text-lg font-semibold">Employees</h2>
           <p className="mt-1 text-sm text-gray-700">
-            This is a list of all employees. You can add new employees, edit or delete existing ones.
+            This is a list of all employees. You can add new employees, edit or
+            delete existing ones.
           </p>
         </div>
         <div>
@@ -42,7 +60,7 @@ const AdminEmployeeList = () => {
             type="button"
             className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
           >
-            <a href="/addNewEmployee">Add new employee</a>
+            <Link to="/adminNewEmp">Add new employee</Link>
           </button>
         </div>
       </div>
@@ -83,15 +101,15 @@ const AdminEmployeeList = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {employeeList.data.map((employee, index) => (
-                    <tr key={index}>
+                  {employeeList.map(employee => (
+                    <tr key={employee.id}>
                       <td className="whitespace-nowrap px-4 py-4">
                         <div className="flex items-center">
                           <div className="h-10 w-10 flex-shrink-0">
                             <img
                               className="h-10 w-10 rounded-full object-cover"
-                              src={employee.ImageUrl}
-                              alt="img"
+                              src={employee.image}
+                              alt=""
                             />
                           </div>
                           <div className="ml-4">
