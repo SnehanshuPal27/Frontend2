@@ -10,6 +10,7 @@ import AdminDashboardLayout from './assets/components/AdminDashboard.jsx';
 
 import AdminEmployeeList from './assets/components/AdminEmployeeList.jsx';
 import NewEmpForm from './assets/components/NewEmpForm.jsx';
+import PlaceOrder from './assets/components/PlaceOrder.jsx';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -22,6 +23,7 @@ function App() {
       <Route path="/adminDashboard" element={<AdminDashboardLayout/>}></Route>
       <Route path="/EmployeeListAdmin" element={<AdminEmployeeList/>}/>
       <Route path="/adminNewEmp" element={<NewEmpForm/>}></Route>
+      <Route path="/placeOrder" element={<PlaceOrder/>}></Route>
     </Routes>
 
    </Router> 
