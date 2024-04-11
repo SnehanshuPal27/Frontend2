@@ -1,11 +1,12 @@
 import React from 'react'
 import axios from "axios"
 import { useState, useEffect } from "react"
+import { useNavigate } from 'react-router-dom'
 
-function PlaceOrder() {
+function PlaceOrder({orderSummary,setOrderSummary,finalInventory,setFinalInventory}) {
 
     return (
-        <div><TableOne /></div>
+        <div><TableOne orderSummary={orderSummary} setOrderSummary={setOrderSummary} finalInventory={finalInventory} setFinalInventory={setFinalInventory}/></div>
     )
 }
 
@@ -63,8 +64,8 @@ function validateQuantity(InventoryList, MenuItemID) {
 }
 
 
-export function TableOne() {
-
+export function TableOne({orderSummary,setOrderSummary,finalInventory,setFinalInventory}) {
+    const navigate = useNavigate();
     const [InventoryList, setInventoryList] = useState([]);
     const [quantityList, setQuantityList] = useState({});
 
@@ -80,27 +81,32 @@ export function TableOne() {
     const [orderTotal,setOrderTotal]=useState(0.0);
     const [IngridientList, setIngridientList] = useState([]);
 
-    useEffect(() => {
-        async function fetchIngridients(MenuItemID) {
-            const data = await getIngridients(MenuItemID);
-            setIngridientList(data);
-        }
-        fetchIngridients();
-    }, []);
+    // useEffect(() => {
+    //     async function fetchIngridients(MenuItemID) {
+    //         const data = await getIngridients(MenuItemID);
+    //         setIngridientList(data);
+    //     }
+    //     fetchIngridients();
+    // }, []);
 
     const fetchIngridients = async (MenuItemID) => {
         console.log(`in fetch ingridients react:${MenuItemID}`)
         const data = await getIngridients(MenuItemID);
-        setIngridientList(data);
+        console.log(data)
+        return data;
+        // setIngridientList(data);
     };
+
     const handleIncrement = async (MenuItemID) => {
         let flag = true;
-        await fetchIngridients(MenuItemID);
+        let fetchedIngridientList=await fetchIngridients(MenuItemID);
+        // IngridientList=[...fetchedIngridientList]
+        await getInventory();
         console.log("c1")
-        console.log(IngridientList)
+        console.log(fetchedIngridientList)
         const updatedInventoryList = [...InventoryList]; // Create a copy of the InventoryList
         console.log(updatedInventoryList)
-        IngridientList.forEach(item => {
+        fetchedIngridientList.forEach(item => {
             let InventoryItemID = item.InventoryID;
             console.log(`${item.InventoryID}outloop` )
             for (let i = 0; i < updatedInventoryList.length; i++) {
@@ -118,7 +124,7 @@ export function TableOne() {
         });
        
         if(flag==true){
-        IngridientList.forEach(item => {
+        fetchedIngridientList.forEach(item => {
             let InventoryItemID = item.InventoryID;
             console.log(`${item.InventoryID}outloop` )
             for (let i = 0; i < updatedInventoryList.length; i++) {
@@ -134,12 +140,14 @@ export function TableOne() {
                 }
             }
         });
+        setInventoryList(updatedInventoryList)
     for(let i=0;i<menuItemList.length;i++){
         if(menuItemList[i].MenuItemID==MenuItemID){
             let newTotal=parseFloat(orderTotal)+parseFloat(menuItemList[i].Price)
             setOrderTotal(newTotal)
         }
     }
+    
     }
     
         if (flag && quantityList[MenuItemID] !== undefined) {
@@ -147,22 +155,24 @@ export function TableOne() {
                 ...prevState,
                 [MenuItemID]: prevState[MenuItemID] + 1
             }));
-            setInventoryList(updatedInventoryList); // Update the InventoryList
+            // setInventoryList(updatedInventoryList); // Update the InventoryList
         } else if (flag) {
             setQuantityList(prevState => ({
                 ...prevState,
                 [MenuItemID]: 1
             }));
-            setInventoryList(updatedInventoryList); // Update the InventoryList
+            // setInventoryList(updatedInventoryList); // Update the InventoryList
         }
+        
+        console.log(InventoryList)
     };
     
 
     const handleDecrement = async (MenuItemID) => {
         const updatedInventoryList = [...InventoryList];
-        await fetchIngridients(MenuItemID);
+       let fetchedIngridientList= await fetchIngridients(MenuItemID);
         if (quantityList[MenuItemID] > 0) {
-            IngridientList.forEach(item => {
+            fetchedIngridientList.forEach(item => {
                 let InventoryItemID = item.InventoryID;
                 console.log(`${item.InventoryID}outloop` )
                 for (let i = 0; i < updatedInventoryList.length; i++) {
@@ -180,7 +190,7 @@ export function TableOne() {
             });
             setQuantityList({ ...quantityList, [MenuItemID]: quantityList[MenuItemID] - 1 });
             setInventoryList(updatedInventoryList);
-            
+
             for(let i=0;i<menuItemList.length;i++){
                 if(menuItemList[i].MenuItemID==MenuItemID){
                     let newTotal=parseFloat(orderTotal)-parseFloat(menuItemList[i].Price)
@@ -201,6 +211,12 @@ export function TableOne() {
     }, []);
 
 const handleFinalise=()=>{
+    console.log(quantityList)
+   setOrderSummary(quantityList)
+   setFinalInventory(InventoryList)
+   console.log(orderSummary)
+   console.log("setIt")
+   navigate("/newFinaliseOrder")
     
 }
 

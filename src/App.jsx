@@ -11,10 +11,12 @@ import AdminDashboardLayout from './assets/components/AdminDashboard.jsx';
 import AdminEmployeeList from './assets/components/AdminEmployeeList.jsx';
 import NewEmpForm from './assets/components/NewEmpForm.jsx';
 import PlaceOrder from './assets/components/PlaceOrder.jsx';
+import { CheckoutOne } from './assets/components/CheckoutOne.jsx';
 
 function App() {
   const [count, setCount] = useState(0);
  const [orderSummary,setOrderSummary]=useState({})
+ const [finalInventory,setFinalInventory]=useState([])
   return (
    <Router>
     <Header/>
@@ -23,7 +25,8 @@ function App() {
       <Route path="/adminDashboard" element={<AdminDashboardLayout/>}></Route>
       <Route path="/EmployeeListAdmin" element={<AdminEmployeeList/>}/>
       <Route path="/adminNewEmp" element={<NewEmpForm/>}></Route>
-      <Route path="/placeOrder"  element={<PlaceOrder orderSummary={orderSummary} setOrderSummary={setOrderSummary} />}></Route>
+      <Route path="/placeOrder"  element={<PlaceOrder orderSummary={orderSummary} setOrderSummary={setOrderSummary} finalInventory={finalInventory} setFinalInventory={setFinalInventory} />}></Route>
+      <Route path="/newFinaliseOrder" element={<CheckoutOne orderSummary={orderSummary} setOrderSummary={setOrderSummary} finalInventory={finalInventory} setFinalInventory={setFinalInventory}/> }></Route>
       <Route path="/orderFinalise" element={<></>}></Route>
     </Routes>
 
