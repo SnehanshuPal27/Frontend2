@@ -14,7 +14,7 @@ import PlaceOrder from './assets/components/PlaceOrder.jsx';
 
 function App() {
   const [count, setCount] = useState(0);
-
+ const [orderSummary,setOrderSummary]=useState({})
   return (
    <Router>
     <Header/>
@@ -23,7 +23,8 @@ function App() {
       <Route path="/adminDashboard" element={<AdminDashboardLayout/>}></Route>
       <Route path="/EmployeeListAdmin" element={<AdminEmployeeList/>}/>
       <Route path="/adminNewEmp" element={<NewEmpForm/>}></Route>
-      <Route path="/placeOrder" element={<PlaceOrder/>}></Route>
+      <Route path="/placeOrder"  element={<PlaceOrder orderSummary={orderSummary} setOrderSummary={setOrderSummary} />}></Route>
+      <Route path="/orderFinalise" element={<></>}></Route>
     </Routes>
 
    </Router> 

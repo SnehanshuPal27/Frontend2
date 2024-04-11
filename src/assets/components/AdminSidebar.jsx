@@ -33,7 +33,7 @@ const AdminSidebar = () => {
                     <Link to="/EmployeeListAdmin"> Employee </Link>
                 </li>
                 <li>
-                    <a href="#">Contact</a>
+                    <Link to="/placeOrder">Take Order </Link>
                 </li>
                 <li>
                     <a href="#">Dashboard</a>

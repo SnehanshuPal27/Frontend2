@@ -9,6 +9,8 @@ function PlaceOrder() {
     )
 }
 
+
+
 async function fetchmenuItems() {
     const currentUserString = localStorage.getItem("currentUser");
     const currentUser = JSON.parse(currentUserString);
@@ -75,7 +77,7 @@ export function TableOne() {
     }, []);
 
     const [quantity, setQuantity] = useState('');
-
+    const [orderTotal,setOrderTotal]=useState(0.0);
     const [IngridientList, setIngridientList] = useState([]);
 
     useEffect(() => {
@@ -131,7 +133,14 @@ export function TableOne() {
                     
                 }
             }
-        });}
+        });
+    for(let i=0;i<menuItemList.length;i++){
+        if(menuItemList[i].MenuItemID==MenuItemID){
+            let newTotal=parseFloat(orderTotal)+parseFloat(menuItemList[i].Price)
+            setOrderTotal(newTotal)
+        }
+    }
+    }
     
         if (flag && quantityList[MenuItemID] !== undefined) {
             setQuantityList(prevState => ({
@@ -171,6 +180,13 @@ export function TableOne() {
             });
             setQuantityList({ ...quantityList, [MenuItemID]: quantityList[MenuItemID] - 1 });
             setInventoryList(updatedInventoryList);
+            
+            for(let i=0;i<menuItemList.length;i++){
+                if(menuItemList[i].MenuItemID==MenuItemID){
+                    let newTotal=parseFloat(orderTotal)-parseFloat(menuItemList[i].Price)
+                    setOrderTotal(newTotal)
+                }
+            }
         }
     };
 
@@ -184,22 +200,30 @@ export function TableOne() {
         fetchData();
     }, []);
 
+const handleFinalise=()=>{
+    
+}
+
+
     return (
         <>
             <section className="mx-auto w-full max-w-8xl px-4 py-4">
                 <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
                     <div>
-                        <h2 className="text-lg font-semibold">Employees</h2>
+                        <h2 className="text-lg font-semibold">Order</h2>
                         <p className="mt-1 text-sm text-gray-700">
-                            This is a list of all employees. You can add new employees, edit or delete existing ones.
+                            Add Order Items for the customer
                         </p>
+                        <div className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+                            Order Total is:{orderTotal}</div>
                     </div>
                     <div>
                         <button
                             type="button"
+                            onClick={handleFinalise}
                             className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                         >
-                            Add new employee
+                           Finalise Order
                         </button>
                     </div>
                 </div>
