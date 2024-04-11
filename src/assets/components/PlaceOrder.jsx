@@ -28,7 +28,7 @@ async function getIngridients(MenuItemID) {
     const currentUserString = localStorage.getItem("currentUser");
     const currentUser = JSON.parse(currentUserString);
     const response = await axios.get(
-        `localhost:3000/api/menu/ingridients/:${MenuItemID}`,
+        `http://localhost:3000/api/menu/ingridients/${MenuItemID}`,
         {
             headers: {
                 Authorization: currentUser.accessToken,
@@ -39,30 +39,138 @@ async function getIngridients(MenuItemID) {
     return response.data;
 }
 
+async function getInventory() {
+    console.log("getInventorycalled")
+    const currentUserString = localStorage.getItem("currentUser");
+    const currentUser = JSON.parse(currentUserString);
+    const response = await axios.get(
+        "http://localhost:3000/api/inventory",
+        {
+            headers: {
+                Authorization: currentUser.accessToken,
 
+            }
+        }
+    );
+    return response.data;
+}
+
+function validateQuantity(InventoryList, MenuItemID) {
+
+
+}
 
 
 export function TableOne() {
 
+    const [InventoryList, setInventoryList] = useState([]);
+    const [quantityList, setQuantityList] = useState({});
+
+    useEffect(() => {
+        async function fetchInventory() {
+            const data = await getInventory();
+            setInventoryList(data);
+        }
+        fetchInventory();
+    }, []);
 
     const [quantity, setQuantity] = useState('');
 
-    const handleIncrement = (MenuItemID) => {
-        useEffect(() => {
-            async function fetchIngridients() {
-                const data = await getIngridients(MenuItemID); // Pass MenuItemID here
-                setMenuItemList(data);
-            }
-            fetchIngridients();
-        }, [MenuItemID]); 
-        
-        
-        
-        // Add MenuItemID as a dependency
+    const [IngridientList, setIngridientList] = useState([]);
+
+    useEffect(() => {
+        async function fetchIngridients(MenuItemID) {
+            const data = await getIngridients(MenuItemID);
+            setIngridientList(data);
+        }
+        fetchIngridients();
+    }, []);
+
+    const fetchIngridients = async (MenuItemID) => {
+        console.log(`in fetch ingridients react:${MenuItemID}`)
+        const data = await getIngridients(MenuItemID);
+        setIngridientList(data);
     };
-    const handleDecrement = (MenuItemID) => {
-        if (onDecrement) {
-            onDecrement(quantity);
+    const handleIncrement = async (MenuItemID) => {
+        let flag = true;
+        await fetchIngridients(MenuItemID);
+        console.log("c1")
+        console.log(IngridientList)
+        const updatedInventoryList = [...InventoryList]; // Create a copy of the InventoryList
+        console.log(updatedInventoryList)
+        IngridientList.forEach(item => {
+            let InventoryItemID = item.InventoryID;
+            console.log(`${item.InventoryID}outloop` )
+            for (let i = 0; i < updatedInventoryList.length; i++) {
+                
+                console.log(`in loop:${updatedInventoryList[i].InventoryID}`)
+
+                if (updatedInventoryList[i].InventoryID === InventoryItemID) {
+                    console.log(item.InventoryID)
+                    if (updatedInventoryList[i].Quantity <= item.Quantity) {
+                        flag = false;
+                        break;
+                    } 
+                }
+            }
+        });
+       
+        if(flag==true){
+        IngridientList.forEach(item => {
+            let InventoryItemID = item.InventoryID;
+            console.log(`${item.InventoryID}outloop` )
+            for (let i = 0; i < updatedInventoryList.length; i++) {
+                
+                console.log(`in loop:${updatedInventoryList[i].InventoryID}`)
+
+                if (updatedInventoryList[i].InventoryID === InventoryItemID) {
+                    console.log(item.InventoryID)
+                    
+                        updatedInventoryList[i].Quantity =updatedInventoryList[i].Quantity- item.Quantity;
+                        console.log(`updated quantity is:${updatedInventoryList[i].Quantity }`)
+                    
+                }
+            }
+        });}
+    
+        if (flag && quantityList[MenuItemID] !== undefined) {
+            setQuantityList(prevState => ({
+                ...prevState,
+                [MenuItemID]: prevState[MenuItemID] + 1
+            }));
+            setInventoryList(updatedInventoryList); // Update the InventoryList
+        } else if (flag) {
+            setQuantityList(prevState => ({
+                ...prevState,
+                [MenuItemID]: 1
+            }));
+            setInventoryList(updatedInventoryList); // Update the InventoryList
+        }
+    };
+    
+
+    const handleDecrement = async (MenuItemID) => {
+        const updatedInventoryList = [...InventoryList];
+        await fetchIngridients(MenuItemID);
+        if (quantityList[MenuItemID] > 0) {
+            IngridientList.forEach(item => {
+                let InventoryItemID = item.InventoryID;
+                console.log(`${item.InventoryID}outloop` )
+                for (let i = 0; i < updatedInventoryList.length; i++) {
+                    
+                    console.log(`in loop:${updatedInventoryList[i].InventoryID}`)
+    
+                    if (updatedInventoryList[i].InventoryID === InventoryItemID) {
+                        console.log(item.InventoryID)
+                        
+                            updatedInventoryList[i].Quantity =updatedInventoryList[i].Quantity+ item.Quantity;
+                            console.log(`updated quantity is:${updatedInventoryList[i].Quantity }`)
+                        
+                    }
+                }
+            });
+            setQuantityList({ ...quantityList, [MenuItemID]: quantityList[MenuItemID] - 1 });
+            setInventoryList(updatedInventoryList);
         }
     };
 
@@ -75,6 +183,7 @@ export function TableOne() {
         }
         fetchData();
     }, []);
+
     return (
         <>
             <section className="mx-auto w-full max-w-8xl px-4 py-4">
@@ -166,7 +275,7 @@ export function TableOne() {
                                                     <form className="max-w-xs mx-auto">
                                                         <label htmlFor="quantity-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose quantity:</label>
                                                         <div className="relative flex items-center max-w-[8rem]">
-                                                            <button type="button" onClick={handleDecrement} id="decrement-button" data-input-counter-decrement="quantity-input" className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                                            <button type="button" onClick={() => handleDecrement(item.MenuItemID)} id="decrement-button" data-input-counter-decrement="quantity-input" className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
                                                                 <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
                                                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
                                                                 </svg>
@@ -177,12 +286,12 @@ export function TableOne() {
                                                                 data-input-counter
                                                                 aria-describedby="helper-text-explanation"
                                                                 className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                                placeholder="999"
-                                                                value={quantity}
+                                                                placeholder="1"
+                                                                value={quantityList[item.MenuItemID] != undefined ? quantityList[item.MenuItemID] : 0}
                                                                 onChange={(e) => setQuantity(e.target.value)}
                                                                 required
                                                             />
-                                                            <button type="button" onClick={handleIncrement} id="increment-button" data-input-counter-increment="quantity-input" className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                                            <button type="button" onClick={() => handleIncrement(item.MenuItemID)} id="increment-button" data-input-counter-increment="quantity-input" className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
                                                                 <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                                                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
                                                                 </svg>
@@ -203,6 +312,9 @@ export function TableOne() {
         </>
     )
 }
+
+
+
 
 
 export default PlaceOrder
