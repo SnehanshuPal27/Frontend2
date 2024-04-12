@@ -1,7 +1,14 @@
 import React from 'react';
 import "./sidebar.css"
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 const AdminSidebar = () => {
+    const navigate=useNavigate()
+    const handleLogout=()=>{
+       localStorage.removeItem("currentUser");
+       console.log("in handle logout")
+       navigate("/")
+    }
     return (
         <nav id="sidebar">
             <div className="sidebar-header">
@@ -36,7 +43,7 @@ const AdminSidebar = () => {
                     <Link to="/placeOrder">Take Order </Link>
                 </li>
                 <li>
-                    <a href="#">Dashboard</a>
+                <Link to="/manageMenu">Manage Menu </Link>
                 </li>
                 <li>
                     <a href="#">Pending donations</a>
@@ -51,7 +58,7 @@ const AdminSidebar = () => {
                     <a href="#">My profile</a>
                 </li>
                 <li>
-                    <a href="#">Logout</a>
+                <a> <button onClick={handleLogout}> Logout </button> </a>
                 </li>
             </ul>
         </nav>

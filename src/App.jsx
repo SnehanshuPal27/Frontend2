@@ -12,11 +12,24 @@ import AdminEmployeeList from './assets/components/AdminEmployeeList.jsx';
 import NewEmpForm from './assets/components/NewEmpForm.jsx';
 import PlaceOrder from './assets/components/PlaceOrder.jsx';
 import { CheckoutOne } from './assets/components/CheckoutOne.jsx';
+import { MenuManage } from './assets/components/MenuManage.jsx';
+import NewMenuForm from './assets/components/NewMenuForm.jsx';
+import NewMenuFormAdd from './assets/components/NewMenuFormAdd.jsx';
 
 function App() {
   const [count, setCount] = useState(0);
  const [orderSummary,setOrderSummary]=useState({})
  const [finalInventory,setFinalInventory]=useState([])
+ const [MenuData, setMenuData] = useState({
+  MenuItemID: '',
+  MenuItemName: '',
+  Description: '',
+  Category: '',
+  Price: '',
+  ImageUrl: '',
+  
+});
+
   return (
    <Router>
     <Header/>
@@ -28,6 +41,9 @@ function App() {
       <Route path="/placeOrder"  element={<PlaceOrder orderSummary={orderSummary} setOrderSummary={setOrderSummary} finalInventory={finalInventory} setFinalInventory={setFinalInventory} />}></Route>
       <Route path="/newFinaliseOrder" element={<CheckoutOne orderSummary={orderSummary} setOrderSummary={setOrderSummary} finalInventory={finalInventory} setFinalInventory={setFinalInventory}/> }></Route>
       <Route path="/orderFinalise" element={<></>}></Route>
+      <Route path="/manageMenu" element={<MenuManage MenuData={MenuData} setMenuData={setMenuData}/>}></Route>
+      <Route path="/editMenuItem" element={<NewMenuForm MenuData={MenuData} setMenuData={setMenuData}/>}></Route> 
+      <Route path ="/addMenuItem" element={<NewMenuFormAdd/>}></Route>
     </Routes>
 
    </Router> 
