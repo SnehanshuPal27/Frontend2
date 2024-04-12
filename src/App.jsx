@@ -15,6 +15,9 @@ import { CheckoutOne } from './assets/components/CheckoutOne.jsx';
 import { MenuManage } from './assets/components/MenuManage.jsx';
 import NewMenuForm from './assets/components/NewMenuForm.jsx';
 import NewMenuFormAdd from './assets/components/NewMenuFormAdd.jsx';
+import { ReservationManage } from './assets/components/MakeReservation.jsx';
+import ReservationCustStatus from './assets/components/ReservationCustStatus.jsx';
+import ReservationFormNewCust from './assets/components/NewReservNewCust/NewReservationNewCust.jsx';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -27,6 +30,15 @@ function App() {
   Category: '',
   Price: '',
   ImageUrl: '',
+  
+});
+const [ReservationData, setReservationData] = useState({
+  ReservationID: '',
+  CustomerID: '',
+  TableID: '',
+  ReservationTime: '',
+  ReservationDate: '',
+  NumberOfGuests: '',
   
 });
 
@@ -44,6 +56,9 @@ function App() {
       <Route path="/manageMenu" element={<MenuManage MenuData={MenuData} setMenuData={setMenuData}/>}></Route>
       <Route path="/editMenuItem" element={<NewMenuForm MenuData={MenuData} setMenuData={setMenuData}/>}></Route> 
       <Route path ="/addMenuItem" element={<NewMenuFormAdd/>}></Route>
+      <Route path="/manageReservation" element={<ReservationManage ReservationData={ReservationData} setReservationData={setReservationData}/>}></Route>
+      <Route path="/custStatusResv" element={<ReservationCustStatus/>}></Route>
+      <Route path="/newResvNewCust" element={<ReservationFormNewCust/>}> </Route>
     </Routes>
 
    </Router> 
