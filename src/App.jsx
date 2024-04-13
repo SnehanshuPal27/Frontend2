@@ -23,6 +23,7 @@ import ReservationEdit from './assets/components/ReservationEdit.jsx';
 import ModifyEmpForm from './assets/components/ModifyEmpForm.jsx';
 import { OrderItemsManage } from './assets/components/OrderItemsManage.jsx';
 import { ReadyItemsManage } from './assets/components/ReadyOrder.jsx';
+import ChefDashboardLayout from './assets/components/ChefDashboard.jsx';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -62,6 +63,7 @@ function App() {
       <Header />
       <Routes>
         <Route path='/' element={<LoginForm />} />
+        <Route path='/chefDashboard' element={<ChefDashboardLayout/>}></Route>
         <Route path="/manageOrderItemsAll" element={<OrderItemsManage/>}></Route>
         <Route path="/manageReadyItemsAll" element={<ReadyItemsManage/>}></Route>
         <Route path="/adminDashboard" element={<AdminDashboardLayout />}></Route>
