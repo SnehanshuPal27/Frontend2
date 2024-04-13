@@ -110,6 +110,11 @@ if (data.role == 'Chef'){
   localStorage.setItem('currentUser', JSON.stringify(currentUser));
   navigate('/chefDashboard', { currentUser } );
 }
+
+if (data.role == 'Server'){
+  localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  navigate('/ServerDashboard', { currentUser } );
+}
       
        // If you want to return the data to the caller
     } catch (error) {

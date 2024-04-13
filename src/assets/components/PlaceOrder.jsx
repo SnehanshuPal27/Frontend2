@@ -289,7 +289,7 @@ const handleFinalise=()=>{
                                                         <div className="h-10 w-10 flex-shrink-0">
                                                             <img
                                                                 className="h-10 w-10 rounded-full object-cover"
-                                                                src={item.image}
+                                                                src={item.ImageUrl}
                                                                 alt="./AlooGobi.jpeg"
                                                             />
                                                         </div>

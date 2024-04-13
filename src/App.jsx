@@ -24,6 +24,7 @@ import ModifyEmpForm from './assets/components/ModifyEmpForm.jsx';
 import { OrderItemsManage } from './assets/components/OrderItemsManage.jsx';
 import { ReadyItemsManage } from './assets/components/ReadyOrder.jsx';
 import ChefDashboardLayout from './assets/components/ChefDashboard.jsx';
+import ServerDashboardLayout from './assets/components/ServerDashboard.jsx';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -63,6 +64,7 @@ function App() {
       <Header />
       <Routes>
         <Route path='/' element={<LoginForm />} />
+        <Route path='/serverDashboard' element={<ServerDashboardLayout/>}></Route>
         <Route path='/chefDashboard' element={<ChefDashboardLayout/>}></Route>
         <Route path="/manageOrderItemsAll" element={<OrderItemsManage/>}></Route>
         <Route path="/manageReadyItemsAll" element={<ReadyItemsManage/>}></Route>

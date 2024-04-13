@@ -20,7 +20,19 @@ const menuItems = [
 
 export default function  Header() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
-
+  const currentUserString = localStorage.getItem("currentUser");
+  const currentUser = JSON.parse(currentUserString);
+  console.log(currentUser)
+  let dashboardUrl="/"
+  if(currentUser.role=='Manager'){
+       dashboardUrl="/adminDashboard"
+  }
+  else if(currentUser.role=='Server'){
+    dashboardUrl="/serverDashboard"
+  }
+  else{
+    dashboardUrl="/chefDashboard"
+  }
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
@@ -39,7 +51,7 @@ export default function  Header() {
                 <div className="hidden lg:block">
                     <ul className="inline-flex space-x-8">
                         <li>
-                            <a href="#" style={{ color: '#DC6B19' }} className="text-sm font-semibold hover:text-gray-900">Menu Item 1</a>
+                            <a href={dashboardUrl} style={{ color: '#DC6B19' }} className="text-sm font-semibold hover:text-gray-900">Dashboard</a>
                         </li>
                         <li>
                             <a href="#" style={{ color: '#DC6B19' }} className="text-sm font-semibold hover:text-gray-900">Menu Item 2</a>

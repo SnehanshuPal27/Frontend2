@@ -1,9 +1,9 @@
 import React from 'react';
-import AdminSidebar from './AdminSidebar';
-import ChefSidebar from './ChefSidebar';
+
 import { useState } from 'react';
 import axios from 'axios';
 import { useEffect } from 'react';
+import ServerSidebar from './ServerSidebar';
 
 // async function getChefStats(){
 //     const currentUserString = localStorage.getItem("currentUser");
@@ -54,7 +54,7 @@ const ServerDashboardLayout = () => {
         <div className="container">
             <div className="row">
                 <div className="col-md-3">
-                    <ChefSidebar />
+                    <ServerSidebar />
                 </div>
                 <div className="col-md-9">
                     <ServerDashboard />
@@ -91,7 +91,7 @@ const ServerDashboard = (props) => {
                 });
                 const x2 = response2.data.length;
 
-                const response3 = await axios.get('http://localhost:3000/api/inventory', {
+                const response3 = await axios.get('http://localhost:3000/api/reservations', {
                     headers: {
                         Authorization: currentUser.accessToken,
                     }
@@ -125,17 +125,17 @@ const ServerDashboard = (props) => {
                     <div className="d-flex gap-3 flex-wrap m-4 text-white">
                         <div className="bg-primary rounded p-3" style={{ width: '250px', backgroundColor: 'rgb(228, 228, 228)', border: '2px solid rgba(0, 123, 255)' }}>
                             <div className="fs-1" style={{ color: '#141E46' }}>{stats[0]}</div>
-                            <div className="fs-5" style={{ fontSize: '1.25rem', color: '#141E46' }}>Pending Orders</div>
+                            <div className="fs-5" style={{ fontSize: '1.25rem', color: '#141E46' }}>Pending Order Items</div>
                         </div>
 
                         <div className="bg-success rounded p-3" style={{ width: '250px', backgroundColor: 'rgb(228, 228, 228)', border: '2px solid rgba(40, 167, 69)' }}>
                             <div className="fs-1" style={{ color: '#141E46' }}>{stats[1]}</div>
-                            <div className="fs-5" style={{ fontSize: '1.25rem', color: '#141E46' }}>Ready and Yet to be Served orders</div>
+                            <div className="fs-5" style={{ fontSize: '1.25rem', color: '#141E46' }}>Ready to Serve Order Items</div>
                         </div>
 
                         <div className="bg-primary rounded p-3" style={{ width: '250px', backgroundColor: 'rgb(228, 228, 228)', border: '2px solid rgba(0, 123, 255)' }}>
                             <div className="fs-1" style={{ color: '#141E46' }}>{stats[2]}</div>
-                            <div className="fs-5" style={{ fontSize: '1.25rem', color: '#141E46' }}>Total Inventory Items</div>
+                            <div className="fs-5" style={{ fontSize: '1.25rem', color: '#141E46' }}>Total Reservations</div>
                         </div>
                     </div>
                 </div>
