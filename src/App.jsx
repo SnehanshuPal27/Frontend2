@@ -18,53 +18,75 @@ import NewMenuFormAdd from './assets/components/NewMenuFormAdd.jsx';
 import { ReservationManage } from './assets/components/MakeReservation.jsx';
 import ReservationCustStatus from './assets/components/ReservationCustStatus.jsx';
 import ReservationFormNewCust from './assets/components/NewReservNewCust/NewReservationNewCust.jsx';
+import ReservationFormOldCust from './assets/components/NewReservNewCust/NewReservationOldCust.jsx';
+import ReservationEdit from './assets/components/ReservationEdit.jsx';
+import ModifyEmpForm from './assets/components/ModifyEmpForm.jsx';
+import { OrderItemsManage } from './assets/components/OrderItemsManage.jsx';
+import { ReadyItemsManage } from './assets/components/ReadyOrder.jsx';
 
 function App() {
   const [count, setCount] = useState(0);
- const [orderSummary,setOrderSummary]=useState({})
- const [finalInventory,setFinalInventory]=useState([])
- const [MenuData, setMenuData] = useState({
-  MenuItemID: '',
-  MenuItemName: '',
-  Description: '',
-  Category: '',
-  Price: '',
-  ImageUrl: '',
-  
-});
-const [ReservationData, setReservationData] = useState({
-  ReservationID: '',
-  CustomerID: '',
-  TableID: '',
-  ReservationTime: '',
-  ReservationDate: '',
-  NumberOfGuests: '',
-  
-});
+  const [orderSummary, setOrderSummary] = useState({})
+  const [finalInventory, setFinalInventory] = useState([])
+  const [MenuData, setMenuData] = useState({
+    MenuItemID: '',
+    MenuItemName: '',
+    Description: '',
+    Category: '',
+    Price: '',
+    ImageUrl: '',
+
+  });
+  const [ReservationData, setReservationData] = useState({
+    ReservationID: '',
+    CustomerID: '',
+    TableID: '',
+    ReservationTime: '',
+    ReservationDate: '',
+    NumberOfGuests: '',
+
+  });
+
+  const [EmpFormData, setEmpFormData] = useState({
+    EmployeeID: '',
+    Email: '',
+    EmployeeName: '',
+    EmployeeRole: '',
+    HireDate: '',
+    Salary: '',
+    Password: ''
+  });
 
   return (
-   <Router>
-    <Header/>
-    <Routes>
-      <Route path='/' element={<LoginForm/>} />
-      <Route path="/adminDashboard" element={<AdminDashboardLayout/>}></Route>
-      <Route path="/EmployeeListAdmin" element={<AdminEmployeeList/>}/>
-      <Route path="/adminNewEmp" element={<NewEmpForm/>}></Route>
-      <Route path="/placeOrder"  element={<PlaceOrder orderSummary={orderSummary} setOrderSummary={setOrderSummary} finalInventory={finalInventory} setFinalInventory={setFinalInventory} />}></Route>
-      <Route path="/newFinaliseOrder" element={<CheckoutOne orderSummary={orderSummary} setOrderSummary={setOrderSummary} finalInventory={finalInventory} setFinalInventory={setFinalInventory}/> }></Route>
-      <Route path="/orderFinalise" element={<></>}></Route>
-      <Route path="/manageMenu" element={<MenuManage MenuData={MenuData} setMenuData={setMenuData}/>}></Route>
-      <Route path="/editMenuItem" element={<NewMenuForm MenuData={MenuData} setMenuData={setMenuData}/>}></Route> 
-      <Route path ="/addMenuItem" element={<NewMenuFormAdd/>}></Route>
-      <Route path="/manageReservation" element={<ReservationManage ReservationData={ReservationData} setReservationData={setReservationData}/>}></Route>
-      <Route path="/custStatusResv" element={<ReservationCustStatus/>}></Route>
-      <Route path="/newResvNewCust" element={<ReservationFormNewCust/>}> </Route>
-    </Routes>
+    <Router>
+      <Header />
+      <Routes>
+        <Route path='/' element={<LoginForm />} />
+        <Route path="/manageOrderItemsAll" element={<OrderItemsManage/>}></Route>
+        <Route path="/manageReadyItemsAll" element={<ReadyItemsManage/>}></Route>
+        <Route path="/adminDashboard" element={<AdminDashboardLayout />}></Route>
+        <Route path="/EmployeeListAdmin" element={<AdminEmployeeList EmpFormData={EmpFormData} setEmpFormData={setEmpFormData} />} />
+        <Route path="/modifyEmployee" element={<ModifyEmpForm EmpFormData={EmpFormData} setEmpFormData={setEmpFormData} />} />
+        <Route path="/adminNewEmp" element={<NewEmpForm />}></Route>
+        <Route path="/placeOrder" element={<PlaceOrder orderSummary={orderSummary} setOrderSummary={setOrderSummary} finalInventory={finalInventory} setFinalInventory={setFinalInventory} />}></Route>
+        <Route path="/newFinaliseOrder" element={<CheckoutOne orderSummary={orderSummary} setOrderSummary={setOrderSummary} finalInventory={finalInventory} setFinalInventory={setFinalInventory} />}></Route>
+        <Route path="/orderFinalise" element={<></>}></Route>
+        <Route path="/manageMenu" element={<MenuManage MenuData={MenuData} setMenuData={setMenuData} />}></Route>
+        <Route path="/editMenuItem" element={<NewMenuForm MenuData={MenuData} setMenuData={setMenuData} />}></Route>
+        <Route path="/addMenuItem" element={<NewMenuFormAdd />}></Route>
+        <Route path="/manageReservation" element={<ReservationManage ReservationData={ReservationData} setReservationData={setReservationData} />}></Route>
+        <Route path="/editReservation" element={<ReservationEdit ReservationData={ReservationData} setReservationData={setReservationData} />}></Route>
+        <Route path="/custStatusResv" element={<ReservationCustStatus />}></Route>
+        <Route path="/newResvNewCust" element={<ReservationFormNewCust />}> </Route>
+        <Route path="/newResvOldCust" element={<ReservationFormOldCust />}> </Route>
+        <Route path="/ResvCustStatus" element={<ReservationCustStatus />}></Route>
 
-   </Router> 
-   
-    
-    
+      </Routes>
+
+    </Router>
+
+
+
   );
 }
 

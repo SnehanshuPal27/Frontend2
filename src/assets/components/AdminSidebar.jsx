@@ -46,7 +46,7 @@ const AdminSidebar = () => {
                 <Link to="/manageMenu">Manage Menu </Link>
                 </li>
                 <li>
-                    <a href="#">Pending donations</a>
+                    <Link to="/manageReservation"> Manage Reservations </Link>
                 </li>
                 <li>
                     <a href="#">Previous donations</a>

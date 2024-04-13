@@ -45,9 +45,16 @@ async function maxReservationValue() {
 
 
 
-const ReservationEdit = ({ReservationData,setReservationData}) => {
+const ReservationFormOldCust = () => {
     const navigate=useNavigate()
-    
+    const [ReservationData, setReservationData] = useState({
+        ReservationID: '',
+        CustomerID: '',
+        TableID: '',
+        ReservationTime: '',
+        ReservationDate: '',
+        NumberOfGuests: ''
+    });
     const [maxGuests, setMaxGuests] = useState(0);
 
     async function assignTable() {
@@ -120,18 +127,21 @@ const ReservationEdit = ({ReservationData,setReservationData}) => {
         const currentUser = JSON.parse(currentUserString);
         // Perform form submission logic here (e.g., send data to server)
         console.log(ReservationData);
-        
+        const outputIndex = await getCustomer(ReservationData.Email)
         // console.log(outputIndex)
-        
-        
+        setReservationData({
+            ...ReservationData,
+            CustomerID: outputIndex
+        });
+        console.log(ReservationData)
         let tableindex = await assignTable()
 
         try {
-            await axios.put(
-                `http://localhost:3000/api/reservations/${ReservationData.ReservationID}`,
+            await axios.post(
+                'http://localhost:3000/api/reservations/',
                 {
-                    CustomerID: ReservationData.CustomerID,
-                    TableID: ReservationData.TableID,
+                    CustomerID: outputIndex,
+                    TableID: tableindex,
                     ReservationTime: ReservationData.ReservationTime,
                     ReservationDate: getCurrentDate(),
                     NumberofGuests: ReservationData.NumberOfGuests
@@ -182,9 +192,9 @@ const ReservationEdit = ({ReservationData,setReservationData}) => {
                     </div> */}
                     <div className="form-row">
                         <div className="input-data">
-                            <input type="text" name="CustomerID" value={ReservationData.CustomerID} onChange={handleChange} required />
+                            <input type="email" name="Email" value={ReservationData.Email} onChange={handleChange} required />
                             <div className="underline"></div>
-                            <label htmlFor="CustomerID">CustomerID</label>
+                            <label htmlFor="CustomerID">Email Address</label>
                         </div>
                     </div>
                     {/* <div className="form-row">
@@ -236,4 +246,4 @@ const ReservationEdit = ({ReservationData,setReservationData}) => {
     );
 };
 
-export default ReservationEdit;
+export default ReservationFormOldCust;

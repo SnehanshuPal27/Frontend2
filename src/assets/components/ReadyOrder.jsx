@@ -4,25 +4,72 @@ import { useState, useEffect } from "react"
 import { useNavigate } from 'react-router-dom';
 import {Link} from "react-router-dom";
 
-async function fetchReservations() {
+
+
+
+async function fetchMenuItem(item){
     const currentUserString = localStorage.getItem("currentUser");
     const currentUser = JSON.parse(currentUserString);
     const response = await axios.get(
-        'http://localhost:3000/api/reservations/',
+        `http://localhost:3000/api/menu/${item.MenuItemID}`,
         {
             headers: {
                 Authorization: currentUser.accessToken,
-                userRole: currentUser.role
+
             }
         }
     );
-    console.log("here")
-    console.log(response.data)
+    return response.data.MenuItemName;
+}
+
+async function fetchOrderItems() {
+    const currentUserString = localStorage.getItem("currentUser");
+    const currentUser = JSON.parse(currentUserString);
+    const response = await axios.get(
+        'http://localhost:3000/api/orders/readyItems',
+        {
+            headers: {
+                Authorization: currentUser.accessToken,
+
+            }
+        }
+    );
     return response.data;
 }
 
-export function ReservationManage({ ReservationData, setReservationData }) {
+export function ReadyItemsManage() {
     const navigate=useNavigate();
+    const [menuItems, setMenuItems] = useState({});
+    const [orderItemList, setOrderItemList] = useState([]);
+    useEffect(() => {
+        async function fetchData() {
+            const currentUserString = localStorage.getItem("currentUser");
+    const currentUser = JSON.parse(currentUserString);
+            const response = await axios.get('http://localhost:3000/api/menu',
+            {
+                headers: {
+                    Authorization: currentUser.accessToken,
+    
+                }
+            });
+            const items = response.data.reduce((acc, item) => {
+                acc[item.MenuItemID] = item.MenuItemName;
+                return acc;
+            }, {});
+            setMenuItems(items);
+        }
+        fetchData();
+    }, []);
+
+   
+
+    useEffect(() => {
+        async function fetchData() {
+            const data = await fetchOrderItems();
+            setOrderItemList(data);
+        }
+        fetchData();
+    }, []);
 
     const handleDelete = async (item) => {
         // e.preventDefault();
@@ -30,8 +77,14 @@ export function ReservationManage({ ReservationData, setReservationData }) {
             const currentUserString = localStorage.getItem("currentUser");
             const currentUser = JSON.parse(currentUserString);
             // console.log(MenuData)
+            
+            
+
+              console.log(item.OrderItemID)
+              
             await axios.delete(
-              `http://localhost:3000/api/reservations/${item.ReservationID}`,
+                
+              `http://localhost:3000/api/orders/delReadyItem/${item.OrderItemID}`,
              
               {
                 headers: {
@@ -40,43 +93,37 @@ export function ReservationManage({ ReservationData, setReservationData }) {
                 }
               }
             );
-            const updatedData = await fetchReservations();
-           setReservationList(updatedData);
+            const updatedData = await fetchOrderItems();
+           setOrderItemList(updatedData);
           } catch (error) {
-            console.error('Error deleting from reservations:', error);
+            console.error('Error deleting from menu:', error);
             // Handle the error as needed
           }
       };
     
-        const handleEdit = (item) => {
-            setReservationData({
-                ...ReservationData,
-                ReservationID: item.ReservationID,
-                CustomerID: item.CustomerID,
-                TableID: item.TableID,
-                ReservationDate: item.ReservationDate,
-                ReservationTime: item.ReservationTime,
-                NumberofGuests: item.NumberofGuests
-            });
+        // const handleEdit = (item) => {
+        //     setMenuData({
+        //         ...MenuData,
+        //         MenuItemID: item.MenuItemID,
+        //         MenuItemName: item.MenuItemName,
+        //         Description: item.Description,
+        //         Category: item.Category,
+        //         Price: item.Price,
+        //         ImageUrl: item.ImageUrl
+        //     });
            
-            console.log(ReservationData)
-            navigate("/editReservation")
-        }
+        //     console.log(MenuData)
+        //     navigate("/editMenuItem")
+        // }
 
 
 
-    const [ReservationList, setReservationList] = useState([]);
+    
 
-    useEffect(() => {
-        async function fetchData() {
-            const data = await fetchReservations();
-            setReservationList(data);
-        }
-        fetchData();
-    }, []);
+    
 
     // useEffect(() => {
-    //     setReservationData({
+    //     setMenuData({
     //         MenuItemID: '',
     //         MenuItemName: '',
     //         Description: '',
@@ -92,21 +139,13 @@ export function ReservationManage({ ReservationData, setReservationData }) {
             <section className="mx-auto w-full max-w-8xl px-4 py-4">
                 <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
                     <div>
-                        <h2 className="text-lg font-semibold">Reservation Manager</h2>
+                        <h2 className="text-lg font-semibold">Ready Orders</h2>
                         <p className="mt-1 text-sm text-gray-700">
-                            Modify the Reservations
+                           Update Ready List after Serving
                         </p>
 
                     </div>
-                    <div>
-                        <button
-                            type="button"
-                            
-                            className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                        >
-                            <Link to="/ResvCustStatus">Add Reservation</Link>
-                        </button>
-                    </div>
+                  
                 </div>
                 <div className="mt-6 flex flex-col">
                     <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -119,75 +158,54 @@ export function ReservationManage({ ReservationData, setReservationData }) {
                                                 scope="col"
                                                 className="px-4 py-3.5 text-left text-sm font-normal text-gray-700"
                                             >
-                                                <span>Table ID</span>
+                                                <span>Order ID</span>
                                             </th>
                                             <th
                                                 scope="col"
                                                 className="px-12 py-3.5 text-left text-sm font-normal text-gray-700"
                                             >
-                                                Customer ID
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-12 py-3.5 text-left text-sm font-normal text-gray-700"
-                                            >
-                                                Number of Guests
+                                                Menu Item Name
                                             </th>
 
                                             <th
                                                 scope="col"
                                                 className="px-4 py-3.5 text-left text-sm font-normal text-gray-700"
                                             >
-                                                Time Slot
+                                                Quantity
                                             </th>
 
-                                            <th
-                                                scope="col"
-                                                className="px-4 py-3.5 text-left text-sm font-normal text-gray-700"
-                                            >
-                                                Reservation Date
-                                            </th>
-                                            <th scope="col" className="relative px-4 py-3.5">
-                                                <span className="sr-only">Edit</span>
-                                            </th>
+                                           
+                                           
                                             <th scope="col" className="relative px-4 py-3.5">
                                                 <span className="sr-only">Delete</span>
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-200 bg-white">
-                                        {ReservationList.map((item) => (
+                                        {orderItemList.map((item) => (
                                             <tr key={item.id}>
                                                 <td className="whitespace-nowrap px-4 py-4">
                                                     <div className="flex items-center">
                                                         
                                                         <div className="ml-4">
-                                                            <div className="text-sm font-medium text-gray-900">{item.TableID}</div>
+                                                            <div className="text-sm font-medium text-gray-900">{item.OrderID}</div>
 
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td className="whitespace-nowrap px-12 py-4 max-w-[10-rem]">
-                                                    <div className="text-sm text-gray-900 break-all">{item.CustomerID}</div>
+                                                    <div className="text-sm text-gray-900 break-all">{menuItems[item.MenuItemID]}</div>
 
                                                 </td>
-                                                
-                                                <td className="whitespace-nowrap px-12 py-4 max-w-[10-rem]">
-                                                    <div className="text-sm text-gray-900 break-all">{item.NumberOfGuests}</div>
-
-                                                </td>
-                                               
                                                 <td className="whitespace-nowrap px-4 py-4">
-                                                    <span className={`inline-flex rounded-full 'bg-yellow-100' px-2 text-xs font-semibold leading-5 ${item.status === 'Active' ? 'text-green-800' : 'text-red-800'}`}>
-                                                        {item.ReservationTime}
+                                                    <span className={`inline-flex rounded-full ${item.Category === 'Non Veg' ? 'bg-red-100' : 'bg-green-100'} px-2 text-xs font-semibold leading-5 ${item.status === 'Active' ? 'text-green-800' : 'text-red-800'}`}>
+                                                        {item.Quantity}
                                                     </span>
                                                 </td>
-                                                <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
-                                                    {item.ReservationDate.substring(0, 10)}
-                                                </td>
+                                                
                                                 <td className="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
-                                                    <button type="button" className="text-gray-700" onClick={() => handleDelete(item)} > 
-                                                    {/*  */}
+                                                    <button type="button" className="text-gray-700"  onClick={() => handleDelete(item)} >
+                                                    {/* */}
                                                         <svg
                                                             xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24"
@@ -202,15 +220,7 @@ export function ReservationManage({ ReservationData, setReservationData }) {
                                                         </svg>
                                                     </button>
                                                 </td>
-                                                <td className="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
-                                                    <button
-                                                        type="button"
-                                                        className="text-gray-700 cursor-pointer focus:outline-none"
-                                                        onClick={() => handleEdit(item)}
-                                                    >
-                                                        Edit
-                                                    </button>
-                                                </td>
+                                               
                                             </tr>
                                         ))}
                                     </tbody>
