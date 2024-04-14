@@ -2,9 +2,14 @@ import React from 'react';
 import "./sidebar.css"
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-const AdminSidebar = () => {
+const AdminSidebar = ({dashLink,setDashLink}) => {
+
+
+    const currentUserString = localStorage.getItem("currentUser");
+    const currentUser = JSON.parse(currentUserString);
     const navigate=useNavigate()
     const handleLogout=()=>{
+       setDashLink("/") 
        localStorage.removeItem("currentUser");
        console.log("in handle logout")
        navigate("/")
@@ -12,11 +17,11 @@ const AdminSidebar = () => {
     return (
         <nav id="sidebar">
             <div className="sidebar-header">
-                <h3>Sidebar</h3>
+                <h3>Welcome {currentUser.name}</h3>
             </div>
 
             <ul className="list-unstyled components">
-                <li>
+                {/* <li>
                     <a href="#">Home</a>
                 </li>
                 <li>
@@ -35,7 +40,7 @@ const AdminSidebar = () => {
                             <a href="#">Page 3</a>
                         </li>
                     </ul>
-                </li>
+                </li> */}
                 <li>
                     <Link to="/EmployeeListAdmin"> Employee </Link>
                 </li>
@@ -49,14 +54,15 @@ const AdminSidebar = () => {
                     <Link to="/manageReservation"> Manage Reservations </Link>
                 </li>
                 <li>
-                    <a href="#">Previous donations</a>
+                <Link to="/manageInventory"> Manage Inventory </Link>
                 </li>
                 <li>
-                    <a href="#">Agents</a>
+                <Link to="/manageCustomers"> Manage Customers </Link>
                 </li>
                 <li>
-                    <a href="#">My profile</a>
+                <Link to="/manageSuppliers"> Manage Suppliers </Link>
                 </li>
+                
                 <li>
                 <a> <button onClick={handleLogout}> Logout </button> </a>
                 </li>

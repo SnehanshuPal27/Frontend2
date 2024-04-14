@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-
+import { useNavigate } from 'react-router-dom';
 
 function getCurrentDate() {
     const currentDate = new Date();
@@ -46,6 +46,7 @@ async function maxReservationValue() {
 
 
 const ReservationFormNewCust = () => {
+    const navigate=useNavigate()
     const [ReservationData, setReservationData] = useState({
         ReservationID: '',
         CustomerID: '',
@@ -84,6 +85,9 @@ const ReservationFormNewCust = () => {
             );
             console.log(response)
             let index = parseInt(response.data['MAX(CustomerID)'])
+            if(index==null){
+            index=0}
+            
             index += 1;
             console.log(index)
             try {
@@ -150,12 +154,12 @@ const ReservationFormNewCust = () => {
         });
 
         let tableindex = await assignTable()
-
+         console.log(ReservationData)
         try {
             await axios.post(
                 'http://localhost:3000/api/reservations/',
                 {
-                    CustomerID: ReservationData.CustomerID,
+                    CustomerID: outputIndex,
                     TableID: tableindex,
                     ReservationTime: ReservationData.ReservationTime,
                     ReservationDate: getCurrentDate(),
@@ -169,6 +173,8 @@ const ReservationFormNewCust = () => {
                     }
                 }
             );
+
+            navigate('/manageReservation')
         } catch (error) {
             console.error('Error creating reservation:', error);
             // Handle the error as needed
@@ -199,7 +205,7 @@ const ReservationFormNewCust = () => {
                     </div>
                     <div className="form-row">
                         <div className="input-data">
-                            <input type="tel" name="CustomerID" value={ReservationData.CustomerID} onChange={handleChange} required />
+                            <input type="tel" name="ContactNumber" value={ReservationData.ContactNumber} onChange={handleChange} required />
                             <div className="underline"></div>
                             <label htmlFor="CustomerID">Contact Number</label>
                         </div>

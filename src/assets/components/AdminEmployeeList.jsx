@@ -148,13 +148,7 @@ const handleDelete = async (item) => {
                     <tr key={employee.id}>
                       <td className="whitespace-nowrap px-4 py-4">
                         <div className="flex items-center">
-                          <div className="h-10 w-10 flex-shrink-0">
-                            <img
-                              className="h-10 w-10 rounded-full object-cover"
-                              src={employee.image}
-                              alt=""
-                            />
-                          </div>
+                          
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
                               {employee.EmployeeName}

@@ -12,44 +12,7 @@ function getCurrentDate() {
   
   return `${year}-${month}-${day}`;
 }
-const products = [
-  {
-    id: 1,
-    name: 'Nike Air Force 1 07 LV8',
-    href: '#',
-    price: '₹47,199',
-    originalPrice: '₹48,900',
-    discount: '5% Off',
-    color: 'Orange',
-    size: '8 UK',
-    imageSrc:
-      'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/54a510de-a406-41b2-8d62-7f8c587c9a7e/air-force-1-07-lv8-shoes-9KwrSk.png',
-  },
-  {
-    id: 2,
-    name: 'Nike Blazer Low 77 SE',
-    href: '#',
-    price: '₹1,549',
-    originalPrice: '₹2,499',
-    discount: '38% off',
-    color: 'White',
-    leadTime: '3-4 weeks',
-    size: '8 UK',
-    imageSrc:
-      'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/e48d6035-bd8a-4747-9fa1-04ea596bb074/blazer-low-77-se-shoes-0w2HHV.png',
-  },
-  {
-    id: 3,
-    name: 'Nike Air Max 90',
-    href: '#',
-    price: '₹2219 ',
-    originalPrice: '₹999',
-    discount: '78% off',
-    color: 'Black',
-    imageSrc:
-      'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/fd17b420-b388-4c8a-aaaa-e0a98ddf175f/dunk-high-retro-shoe-DdRmMZ.png',
-  },
-]
+
 
 async function fetchmenuItems() {
   const currentUserString = localStorage.getItem("currentUser");
@@ -77,6 +40,7 @@ export function CheckoutOne({ orderSummary, setOrderSummary,finalInventory,setFi
   const [email, setEmail] = useState('');
   const [contactNumber, setContactNumber] = useState('');
   const [address, setAddress] = useState('');
+  const [paymentmode, setPaymentMode] = useState('');
   const [menuItemList, setMenuItemList] = useState([]);
   
   async function lodgeCustomer(){
@@ -123,6 +87,32 @@ export function CheckoutOne({ orderSummary, setOrderSummary,finalInventory,setFi
     }
   }
   
+  async function getCustomer(email) {
+    try {
+        const currentUserString = localStorage.getItem("currentUser");
+        const currentUser = JSON.parse(currentUserString);
+        const response = await axios.post(
+            'http://localhost:3000/api/customers/email',{
+                Email: email
+
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: currentUser.accessToken,
+                    userRole: currentUser.role
+                }
+                 
+            }
+        );
+        console.log(response.data);
+        return response.data['CustomerID'];
+    } catch (error) {
+        console.error('Error in getCustomer:', error.message);
+        return 0;
+    }
+}
+    
 
 
     useEffect(() => {
@@ -166,8 +156,8 @@ const handleSubmit = async (e) => {
     e.preventDefault();
     const currentUserString = localStorage.getItem("currentUser");
     const currentUser = JSON.parse(currentUserString);
-    let customerID = await lodgeCustomer();
-    console.log("hi");
+    let customerID = await getCustomer(email);
+    // console.log("hi");
     const response = await axios.get(
       'http://localhost:3000/api/orders/highestOrderIndex',
       {
@@ -187,6 +177,7 @@ const handleSubmit = async (e) => {
           CustomerID: customerID,
           OrderTotal: orderAmountTotal,
           OrderDate: getCurrentDate(),
+          Paymentmethod:paymentmode
         },{
         headers: {
           Authorization: currentUser.accessToken,
@@ -201,6 +192,7 @@ const handleSubmit = async (e) => {
           MenuItemID: item.MenuItemID,
           Quantity: orderSummary[item.MenuItemID],
           Price: item.Price,
+         
           
         },{
         
@@ -214,7 +206,8 @@ const handleSubmit = async (e) => {
 
     console.log(finalInventory)
     finalInventory.forEach(async (item) => {
-      await axios.post("http://localhost:3000/api/inventory/update",{InventoryID:item.InventoryID,Quantity:item.Quantity},{
+      console.log(item)
+      await axios.put(`http://localhost:3000/api/inventory/${item.InventoryID}`,{Quantity:item.Quantity},{
         
       headers: {
         Authorization: currentUser.accessToken,
@@ -249,7 +242,7 @@ const handleSubmit = async (e) => {
                     <div className="flex-shrink-0">
                       <img
                         className="h-20 w-20 rounded-lg border border-gray-200 bg-white object-contain"
-                        src={item.imageSrc}
+                        src={item.ImageUrl}
                         alt=" "
                       />
                     </div>
@@ -289,7 +282,7 @@ const handleSubmit = async (e) => {
 
                   <form onSubmit={handleSubmit} className="mt-6">
                     <div className="space-y-5">
-                      <div className="grid w-full max-w-sm items-center gap-1.5">
+                      {/* <div className="grid w-full max-w-sm items-center gap-1.5">
                         <label htmlFor="name" className="text-sm font-medium">
                           Full Name
                         </label>
@@ -301,7 +294,7 @@ const handleSubmit = async (e) => {
                           className="flex w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1"
                           placeholder="Full Name"
                         />
-                      </div>
+                      </div> */}
                       <div className="grid w-full max-w-sm items-center gap-1.5">
                         <label htmlFor="email" className="text-sm font-medium">
                           Email
@@ -316,6 +309,19 @@ const handleSubmit = async (e) => {
                         />
                       </div>
                       <div className="grid w-full max-w-sm items-center gap-1.5">
+                        <label htmlFor="email" className="text-sm font-medium">
+                          Payment Method
+                        </label>
+                        <input
+                          type="text"
+                          id="paymentMode"
+                          value={paymentmode}
+                          onChange={(e) => setPaymentMode(e.target.value)}
+                          className="flex w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1"
+                          placeholder="paymentMode"
+                        />
+                      </div>
+                      {/* <div className="grid w-full max-w-sm items-center gap-1.5">
                         <label htmlFor="contactNumber" className="text-sm font-medium">
                           Contact Number
                         </label>
@@ -340,7 +346,7 @@ const handleSubmit = async (e) => {
                           className="flex w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1"
                           placeholder="Address"
                         />
-                      </div>
+                      </div> */}
                       <div>
                         <button
                           type="submit"

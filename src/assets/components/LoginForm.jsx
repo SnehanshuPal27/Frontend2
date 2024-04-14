@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import axios from "axios"
 import { useNavigate } from 'react-router-dom';
 
-const LoginForm = () => {
+const LoginForm = ({dashLink ,setDashLink}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-
+  setDashLink('/')
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {

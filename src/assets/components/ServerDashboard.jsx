@@ -48,16 +48,16 @@ import ServerSidebar from './ServerSidebar';
 // }
 
 
-const ServerDashboardLayout = () => {
+const ServerDashboardLayout = ({dashLink,setDashLink}) => {
     
     return (
         <div className="container">
             <div className="row">
                 <div className="col-md-3">
-                    <ServerSidebar />
+                    <ServerSidebar dashLink={dashLink} setDashLink={setDashLink}/>
                 </div>
                 <div className="col-md-9">
-                    <ServerDashboard />
+                    <ServerDashboard dashLink={dashLink} setDashLink={setDashLink} />
                 </div>
             </div>
         </div>
@@ -67,13 +67,14 @@ const ServerDashboardLayout = () => {
 
 
 
-const ServerDashboard = (props) => {
+const ServerDashboard = ({dashLink,setDashLink}) => {
     const [stats, setStats] = useState([0, 0, 0]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setDashLink('/serverDashboard')
                 const currentUserString = localStorage.getItem("currentUser");
                 const currentUser = JSON.parse(currentUserString);
 

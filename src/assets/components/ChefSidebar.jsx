@@ -2,9 +2,10 @@ import React from 'react';
 import "./sidebar.css"
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-const ChefSidebar = () => {
+const ChefSidebar = ({dashLink,setDashLink}) => {
     const navigate=useNavigate()
     const handleLogout=()=>{
+       setDashLink("/")  
        localStorage.removeItem("currentUser");
        console.log("in handle logout")
        navigate("/")
@@ -23,10 +24,10 @@ const ChefSidebar = () => {
                 </li>
                 
                 <li>
-                    <Link to="/manageOrderItemsAll"> Process Orders</Link>
+                    <Link to="/manageOrderItemsAll">Process Orders</Link>
                 </li>
                 <li>
-                    <a href="#">Agents</a>
+                <Link to="/manageIngridients">Manange Ingredients</Link>
                 </li>
                 <li>
                     <a href="#">My profile</a>

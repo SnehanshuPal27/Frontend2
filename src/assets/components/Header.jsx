@@ -18,25 +18,24 @@ const menuItems = [
   },
 ]
 
-export default function  Header() {
+export default function  Header({dashLink ,setDashLink}) {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
   const currentUserString = localStorage.getItem("currentUser");
   const currentUser = JSON.parse(currentUserString);
-  console.log(currentUser)
-  let dashboardUrl="/"
-  if(currentUser.role=='Manager'){
-       dashboardUrl="/adminDashboard"
-  }
-  else if(currentUser.role=='Server'){
-    dashboardUrl="/serverDashboard"
-  }
-  else{
-    dashboardUrl="/chefDashboard"
-  }
+  
+  console.log(currentUser?.role);
+  let dashboardUrl = dashLink;
+  // if (currentUser?.role === 'Manager') {
+  //   dashboardUrl = "/adminDashboard";
+  // } else if (currentUser?.role === 'Server') {
+  //   dashboardUrl = "/serverDashboard";
+  // } else if (currentUser?.role === 'Chef') {
+  //   dashboardUrl = "/chefDashboard";
+  // }
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
-
+  console.log(dashboardUrl)
   return (
     <div className="relative w-full bg-[#FEFAE0]">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
@@ -54,18 +53,14 @@ export default function  Header() {
                             <a href={dashboardUrl} style={{ color: '#DC6B19' }} className="text-sm font-semibold hover:text-gray-900">Dashboard</a>
                         </li>
                         <li>
-                            <a href="#" style={{ color: '#DC6B19' }} className="text-sm font-semibold hover:text-gray-900">Menu Item 2</a>
+                            <a href="#" style={{ color: '#DC6B19' }} className="text-sm font-semibold hover:text-gray-900">FAQs</a>
                         </li>
                         <li>
-                            <a href="#" style={{ color: '#DC6B19' }} className="text-sm font-semibold hover:text-gray-900">Menu Item 3</a>
+                            <a href="#" style={{ color: '#DC6B19' }} className="text-sm font-semibold hover:text-gray-900">About Us</a>
                         </li>
                     </ul>
                 </div>
-                <div className="hidden lg:block">
-                    <button type="button" className="rounded-md bg-['#DC6B19'] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#DC6B19]/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-#DC6B19">
-                        Button text
-                    </button>                
-                </div>
+                
                 <div className="lg:hidden">
                     {/* Your mobile menu button goes here */}
                 </div>

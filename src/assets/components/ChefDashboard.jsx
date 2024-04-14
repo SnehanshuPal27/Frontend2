@@ -48,16 +48,16 @@ import { useEffect } from 'react';
 // }
 
 
-const ChefDashboardLayout = () => {
+const ChefDashboardLayout = ({dashLink,setDashLink}) => {
     
     return (
         <div className="container">
             <div className="row">
                 <div className="col-md-3">
-                    <ChefSidebar />
+                    <ChefSidebar dashLink={dashLink} setDashLink={setDashLink}/>
                 </div>
                 <div className="col-md-9">
-                    <ChefDashboard />
+                    <ChefDashboard dashLink={dashLink} setDashLink={setDashLink} />
                 </div>
             </div>
         </div>
@@ -67,13 +67,14 @@ const ChefDashboardLayout = () => {
 
 
 
-const ChefDashboard = (props) => {
+const ChefDashboard = ({dashLink,setDashLink}) => {
     const [stats, setStats] = useState([0, 0, 0]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setDashLink('/chefDashboard')
                 const currentUserString = localStorage.getItem("currentUser");
                 const currentUser = JSON.parse(currentUserString);
 

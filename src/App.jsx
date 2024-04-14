@@ -25,9 +25,22 @@ import { OrderItemsManage } from './assets/components/OrderItemsManage.jsx';
 import { ReadyItemsManage } from './assets/components/ReadyOrder.jsx';
 import ChefDashboardLayout from './assets/components/ChefDashboard.jsx';
 import ServerDashboardLayout from './assets/components/ServerDashboard.jsx';
+import { InventoryManage } from './assets/components/InventoryManage.jsx';
+import NewInventoryAdd from './assets/components/NewInventoryAdd.jsx';
+import ModifyInventory from './assets/components/ModifyInventory.jsx';
+import { CustomerManage } from './assets/components/ManageCustomer.jsx';
+import ModifyCustomer from './assets/components/ModifyCustomer.jsx';
+import AddCustomer from './assets/components/AddCustomer.jsx';
+import { IngridientsManage } from './assets/components/ManageIngridients.jsx';
+import ModifyIngridients from './assets/components/ModifyIngridients.jsx';
+import AddIngridient from './assets/components/AddIngridient.jsx';
+import { SupplierManage } from './assets/components/ManageSuppliers.jsx';
+import ModifySupplier from './assets/components/ModifySupplier.jsx';
+import AddSupplier from './assets/components/AddSupplier.jsx';
+import Profile from './assets/components/Profile.jsx';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [dashLink, setDashLink] = useState('/');
   const [orderSummary, setOrderSummary] = useState({})
   const [finalInventory, setFinalInventory] = useState([])
   const [MenuData, setMenuData] = useState({
@@ -39,6 +52,27 @@ function App() {
     ImageUrl: '',
 
   });
+
+  const [inventoryData, setInventoryData] = useState({
+    InventoryID: '',
+    SupplierID: '',
+    ItemName: '',
+    Category: '',
+    Quantity: '',
+    ExpiryDate: ''
+
+  });  
+
+  const [customerData, setCustomerData] = useState({
+    CustomerID: '',
+    CustomerName: '',
+    ContactNumber: '',
+    Email: '',
+    Address: ''
+    
+
+  });  
+
   const [ReservationData, setReservationData] = useState({
     ReservationID: '',
     CustomerID: '',
@@ -46,6 +80,23 @@ function App() {
     ReservationTime: '',
     ReservationDate: '',
     NumberOfGuests: '',
+
+  });
+
+  const [supplierData, setSupplierData] = useState({
+    SupplierID :'',
+    SupplierName :'',
+    SupplierAddress: '',
+    ContactPerson:'',
+    ContactNumber :''
+
+  });  
+
+  const [ingridientData, setIngridientData] = useState({
+    MenuItemID: '',
+    InventoryID: '',
+    Quantity: ''
+    
 
   });
 
@@ -61,14 +112,24 @@ function App() {
 
   return (
     <Router>
-      <Header />
+      <Header dashLink={dashLink} setDashLink={setDashLink} />
       <Routes>
-        <Route path='/' element={<LoginForm />} />
-        <Route path='/serverDashboard' element={<ServerDashboardLayout/>}></Route>
-        <Route path='/chefDashboard' element={<ChefDashboardLayout/>}></Route>
+        <Route path='/profile' element={<Profile></Profile>}></Route>
+        <Route path='/addSupplier' element={<AddSupplier/>}></Route>
+        <Route path='/manageSuppliers' element={<SupplierManage supplierData={supplierData} setSupplierData={setSupplierData}/>}></Route>
+        <Route path='/editSupplier' element={<ModifySupplier supplierData={supplierData} setSupplierData={setSupplierData}/>}></Route>
+        <Route path='/addIngridient' element={<AddIngridient/>}></Route>
+        <Route path='/modifyIngridients' element={<ModifyIngridients ingridientData={ingridientData} setIngridientData={setIngridientData}/>}></Route>
+        <Route path='/manageIngridients' element={<IngridientsManage ingridientData={ingridientData} setIngridientData={setIngridientData}/>}></Route>
+        <Route path='/addCustomer' element={<AddCustomer/>}></Route>
+        <Route path='/manageCustomers' element={<CustomerManage customerData={customerData} setCustomerData={setCustomerData}/> }></Route> 
+        <Route path='/editCustomer' element={<ModifyCustomer customerData={customerData} setCustomerData={setCustomerData}/>}></Route>
+        <Route path='/' element={<LoginForm dashLink={dashLink} setDashLink={setDashLink} />} />
+        <Route path='/serverDashboard' element={<ServerDashboardLayout dashLink={dashLink} setDashLink={setDashLink}/>}></Route>
+        <Route path='/chefDashboard' element={<ChefDashboardLayout dashLink={dashLink} setDashLink={setDashLink}/>}></Route>
         <Route path="/manageOrderItemsAll" element={<OrderItemsManage/>}></Route>
         <Route path="/manageReadyItemsAll" element={<ReadyItemsManage/>}></Route>
-        <Route path="/adminDashboard" element={<AdminDashboardLayout />}></Route>
+        <Route path="/adminDashboard" element={<AdminDashboardLayout dashLink={dashLink} setDashLink={setDashLink} />}></Route>
         <Route path="/EmployeeListAdmin" element={<AdminEmployeeList EmpFormData={EmpFormData} setEmpFormData={setEmpFormData} />} />
         <Route path="/modifyEmployee" element={<ModifyEmpForm EmpFormData={EmpFormData} setEmpFormData={setEmpFormData} />} />
         <Route path="/adminNewEmp" element={<NewEmpForm />}></Route>
@@ -84,7 +145,9 @@ function App() {
         <Route path="/newResvNewCust" element={<ReservationFormNewCust />}> </Route>
         <Route path="/newResvOldCust" element={<ReservationFormOldCust />}> </Route>
         <Route path="/ResvCustStatus" element={<ReservationCustStatus />}></Route>
-
+        <Route path="/manageInventory" element={<InventoryManage inventoryData={inventoryData} setInventoryData={setInventoryData}/>}></Route>
+        <Route path="/addInventory" element={<NewInventoryAdd/>}></Route>
+        <Route path ="/editInventory" element={<ModifyInventory inventoryData={inventoryData} setInventoryData={setInventoryData}/>}></Route>
       </Routes>
 
     </Router>

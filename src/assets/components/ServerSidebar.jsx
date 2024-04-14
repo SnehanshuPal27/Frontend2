@@ -3,9 +3,10 @@ import "./sidebar.css"
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-const ServerSidebar = () => {
+const ServerSidebar = ({dashLink,setDashLink}) => {
     const navigate=useNavigate()
     const handleLogout=()=>{
+        setDashLink('/')
        localStorage.removeItem("currentUser");
        console.log("in handle logout")
        navigate("/")
