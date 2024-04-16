@@ -168,10 +168,10 @@ if (data.role == 'Server'){
     
         <button type="submit" className="btn btn-lg btn-primary joinus m-auto mt-3" style={{ width: '200px', borderRadius: 0, zIndex: 6, backgroundColor: '#DC6B19' }}>Submit</button>
     
-        <div className="mt-3">
+        {/* <div className="mt-3">
           <span>Don't have an account?</span>
           <a href="/auth/signup">Signup here</a>
-        </div>
+        </div> */}
       </form>
     </div>
   );
