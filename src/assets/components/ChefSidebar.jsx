@@ -10,10 +10,12 @@ const ChefSidebar = ({dashLink,setDashLink}) => {
        console.log("in handle logout")
        navigate("/")
     }
+    const currentUserString = localStorage.getItem("currentUser");
+    const currentUser = JSON.parse(currentUserString);
     return (
         <nav id="sidebar">
             <div className="sidebar-header">
-                <h3>Sidebar</h3>
+                <h3>Welcome {currentUser.name}</h3>
             </div>
 
             <ul className="list-unstyled components">
@@ -30,7 +32,7 @@ const ChefSidebar = ({dashLink,setDashLink}) => {
                 <Link to="/manageIngridients">Manange Ingredients</Link>
                 </li>
                 <li>
-                    <a href="#">My profile</a>
+                <Link to="/profile">View Profile</Link>
                 </li>
                 <li>
                 <a> <button onClick={handleLogout}> Logout </button> </a>

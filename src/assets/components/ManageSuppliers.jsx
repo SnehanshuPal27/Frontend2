@@ -121,7 +121,7 @@ export function SupplierManage({ supplierData, setSupplierData }) {
                                                 scope="col"
                                                 className="px-4 py-3.5 text-left text-sm font-normal text-gray-700"
                                             >
-                                                <span>Customer ID</span>
+                                                <span>Supplier ID</span>
                                             </th>
 
                                             <th

@@ -37,7 +37,10 @@ import AddIngridient from './assets/components/AddIngridient.jsx';
 import { SupplierManage } from './assets/components/ManageSuppliers.jsx';
 import ModifySupplier from './assets/components/ModifySupplier.jsx';
 import AddSupplier from './assets/components/AddSupplier.jsx';
-import Profile from './assets/components/Profile.jsx';
+import Profile from './assets/components/Profile/Profile.jsx';
+import FeaturesSection from './assets/components/AboutUs.jsx';
+import FAQPage from './assets/components/FAQ.jsx';
+import { Finances } from './assets/components/Finances.jsx';
 
 function App() {
   const [dashLink, setDashLink] = useState('/');
@@ -114,6 +117,7 @@ function App() {
     <Router>
       <Header dashLink={dashLink} setDashLink={setDashLink} />
       <Routes>
+        <Route path='/finances' element={<Finances/>}></Route>
         <Route path='/profile' element={<Profile></Profile>}></Route>
         <Route path='/addSupplier' element={<AddSupplier/>}></Route>
         <Route path='/manageSuppliers' element={<SupplierManage supplierData={supplierData} setSupplierData={setSupplierData}/>}></Route>
@@ -148,6 +152,8 @@ function App() {
         <Route path="/manageInventory" element={<InventoryManage inventoryData={inventoryData} setInventoryData={setInventoryData}/>}></Route>
         <Route path="/addInventory" element={<NewInventoryAdd/>}></Route>
         <Route path ="/editInventory" element={<ModifyInventory inventoryData={inventoryData} setInventoryData={setInventoryData}/>}></Route>
+        <Route path='/aboutUs' element={<FeaturesSection/>}/>
+        <Route path='/faq' element={<FAQPage/>}/>
       </Routes>
 
     </Router>

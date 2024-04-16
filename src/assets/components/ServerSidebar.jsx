@@ -11,10 +11,13 @@ const ServerSidebar = ({dashLink,setDashLink}) => {
        console.log("in handle logout")
        navigate("/")
     }
+
+    const currentUserString = localStorage.getItem("currentUser");
+    const currentUser = JSON.parse(currentUserString);
     return (
         <nav id="sidebar">
             <div className="sidebar-header">
-                <h3>Sidebar</h3>
+                <h3>Welcome {currentUser.name}</h3>
             </div>
 
             <ul className="list-unstyled components">
@@ -31,7 +34,7 @@ const ServerSidebar = ({dashLink,setDashLink}) => {
                     <Link to ="/manageReservation"> Manage Reservations</Link>
                 </li>
                 <li>
-                    <a href="#">My profile</a>
+                    <a href="/profile">My profile</a>
                 </li>
                 <li>
                 <a> <button onClick={handleLogout}> Logout </button> </a>

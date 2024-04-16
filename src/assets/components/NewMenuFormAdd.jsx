@@ -33,7 +33,8 @@ const NewMenuFormAdd = () => {
                 MenuItemName: MenuData.MenuItemName,
                 Price: MenuData.Price,
                 Category: MenuData.Category,
-                ImageUrl: MenuData.ImageUrl
+                ImageUrl: MenuData.ImageUrl,
+                Description:MenuData.Description
                 
               },
               {
@@ -73,14 +74,15 @@ const NewMenuFormAdd = () => {
                             <input type="text" id="Category" name="Category" value={MenuData.Category} onChange={handleChange} required />
                         </div>
                         <div className="form-group">
+                            <label htmlFor="email">Description</label>
+                            <input type="text" id="Category" name="Description" value={MenuData.Description} onChange={handleChange} required />
+                        </div>
+                        <div className="form-group">
                             <label htmlFor="email">ImageUrl</label>
                             <input type="text" id="ImageUrl" name="ImageUrl" value={MenuData.ImageUrl} onChange={handleChange} required />
                         </div>
                        
-                        <div className="form-group">
-                            
-                            <a className="form-recovery" href="#">Forgot Password?</a>
-                        </div>
+                        
                         <div className="form-group">
                             <button type="submit"> Submit</button>
                         </div>

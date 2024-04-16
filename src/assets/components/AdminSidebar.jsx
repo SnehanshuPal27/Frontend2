@@ -62,6 +62,12 @@ const AdminSidebar = ({dashLink,setDashLink}) => {
                 <li>
                 <Link to="/manageSuppliers"> Manage Suppliers </Link>
                 </li>
+                <li>
+                <Link to="/finances"> Manage Orders & Finances </Link>
+                </li>
+                <li>
+                <Link to="/profile"> My Profile </Link>
+                </li>
                 
                 <li>
                 <a> <button onClick={handleLogout}> Logout </button> </a>

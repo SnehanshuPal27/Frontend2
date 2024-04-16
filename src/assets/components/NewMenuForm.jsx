@@ -24,7 +24,8 @@ const NewMenuForm = ({MenuData,setMenuData}) => {
                 MenuItemName: MenuData.MenuItemName,
                 Price: MenuData.Price,
                 Category: MenuData.Category,
-                ImageUrl: MenuData.ImageUrl
+                ImageUrl: MenuData.ImageUrl,
+                Description:MenuData.Description
                 
               },
               {
@@ -62,6 +63,10 @@ const NewMenuForm = ({MenuData,setMenuData}) => {
                         <div className="form-group">
                             <label htmlFor="email">Category</label>
                             <input type="text" id="Category" name="Category" value={MenuData.Category} onChange={handleChange} required />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="email">Description</label>
+                            <input type="text" id="Category" name="Description" value={MenuData.Description} onChange={handleChange} required />
                         </div>
                         <div className="form-group">
                             <label htmlFor="email">ImageUrl</label>

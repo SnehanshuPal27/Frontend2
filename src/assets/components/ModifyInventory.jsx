@@ -21,7 +21,7 @@ function getDateFromISOString(isoString) {
 
 
 
-const ModifyInventory = ({customerData,setCustomerData}) => {
+const ModifyInventory = ({inventoryData,setInventoryData}) => {
     // const [inventoryData, setInventoryData] = useState({
 
     //     SupplierID: '',
@@ -37,7 +37,7 @@ const ModifyInventory = ({customerData,setCustomerData}) => {
     const handleChange = (e) => {
         
         const { name, value } = e.target;
-        setCustomerData({ ...customerData, [name]: value });
+        setInventoryData({ ...inventoryData, [name]: value });
         // console.log(inventoryData) 
     };
 
@@ -48,12 +48,14 @@ const ModifyInventory = ({customerData,setCustomerData}) => {
             const currentUser = JSON.parse(currentUserString);
             // const expiryDateISOString = new Date(inventoryData.ExpiryDate).toISOString();
             await axios.put(
-                `http://localhost:3000/api/inventory/${customerData.InventoryID}`,
+                `http://localhost:3000/api/inventory/${inventoryData.InventoryID}`,
                 {
-                    CustomerName: c ,
-    ContactNumber: '',
-    Email: '',
-    Address: ''
+                    
+    SupplierID: inventoryData.SupplierID,
+    ItemName: inventoryData.ItemName,
+    Category: inventoryData.Category,
+    Quantity: inventoryData.Quantity,
+    ExpiryDate: getDateFromISOString(inventoryData.ExpiryDate)
 
                 },
                 {
@@ -104,7 +106,7 @@ const ModifyInventory = ({customerData,setCustomerData}) => {
                             <input type="text" id="Category" name="SupplierID" value={inventoryData.SupplierID} onChange={handleChange} required />
                         </div>
 
-
+                       
 
                         <div className="form-group">
                             <button type="submit"> Submit</button>

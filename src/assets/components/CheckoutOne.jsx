@@ -214,9 +214,13 @@ const handleSubmit = async (e) => {
       }})
   })
 
-  
-  navigate('/adminDashboard')
-  
+  // if(currentUser.role=='Manager'){
+  // navigate('/adminDashboard')
+  // }
+  // else if(currentUser.role=='Server'){
+  //   navigate('/serverDashboard')
+  // }
+  navigate('/placeOrder')
 }
 
   catch (error) {
@@ -353,7 +357,7 @@ const handleSubmit = async (e) => {
                           
                           className="w-full rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                         >
-                          Get Started
+                          Place Order
                         </button>
                       </div>
                     </div>
